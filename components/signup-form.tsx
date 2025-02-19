@@ -1,14 +1,31 @@
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+"use client";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { signup } from "@/lib/firebase";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
-export function SignupForm({
-  className,
-  ...props
-}: React.ComponentPropsWithoutRef<"form">) {
+export function SignupForm({ className, ...props }: React.ComponentPropsWithoutRef<"form">) {
+  const [formData, setFormData] = useState({ email: "", password: "" });
+  const router = useRouter();
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await signup(formData.email, formData.password);
+    router.push("/dashboard");
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [id]: value,
+    }));
+  };
+
   return (
-    <form className={cn("flex flex-col gap-6", className)} {...props}>
+    <form className={cn("flex flex-col gap-6", className)} {...props} onSubmit={handleSubmit}>
       <div className="flex flex-col items-center gap-2 text-center">
         <h1 className="text-2xl font-bold">Create an account</h1>
         <p className="text-balance text-sm text-muted-foreground"> Enter your email below to create an account</p>
@@ -16,13 +33,13 @@ export function SignupForm({
       <div className="grid gap-6">
         <div className="grid gap-2">
           <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" placeholder="m@example.com" required />
+          <Input id="email" type="email" placeholder="m@example.com" required value={formData.email} onChange={handleChange} />
         </div>
         <div className="grid gap-2">
           <div className="flex items-center">
             <Label htmlFor="password">Password</Label>
           </div>
-          <Input id="password" type="password" required />
+          <Input id="password" type="password" required minLength={6} value={formData.password} onChange={handleChange} />
         </div>
         <Button type="submit" className="w-full">
           Sign up
