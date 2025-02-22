@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { signup } from "@/lib/firebase";
+import { signup, googleLogin } from "@/lib/firebase";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -15,7 +15,6 @@ export function SignupForm({ className, ...props }: React.ComponentPropsWithoutR
     await signup(formData.email, formData.password);
     router.push("/dashboard");
   };
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
     setFormData((prevData) => ({
@@ -23,7 +22,10 @@ export function SignupForm({ className, ...props }: React.ComponentPropsWithoutR
       [id]: value,
     }));
   };
-
+  const handleGoogleLogin = async () => {
+    await googleLogin();
+    router.push("/dashboard");
+  };
   return (
     <form className={cn("flex flex-col gap-6", className)} {...props} onSubmit={handleSubmit}>
       <div className="flex flex-col items-center gap-2 text-center">
@@ -47,7 +49,7 @@ export function SignupForm({ className, ...props }: React.ComponentPropsWithoutR
         <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
           <span className="relative z-10 bg-background px-2 text-muted-foreground">Or continue with</span>
         </div>
-        <Button variant="outline" className="w-full">
+        <Button variant="outline" className="w-full" type="button" onClick={handleGoogleLogin}>
           <svg width="800px" height="800px" viewBox="0 0 32 32" data-name="Layer 1" id="Layer_1" xmlns="http://www.w3.org/2000/svg">
             <path d="M23.75,16A7.7446,7.7446,0,0,1,8.7177,18.6259L4.2849,22.1721A13.244,13.244,0,0,0,29.25,16" fill="#00ac47" />
             <path d="M23.75,16a7.7387,7.7387,0,0,1-3.2516,6.2987l4.3824,3.5059A13.2042,13.2042,0,0,0,29.25,16" fill="#4285f4" />
@@ -57,7 +59,7 @@ export function SignupForm({ className, ...props }: React.ComponentPropsWithoutR
             <polygon fill="#2ab2db" points="8.718 18.626 8.718 18.626 8.718 18.626 8.718 18.626" />
             <path d="M29.25,15v1L27,19.5H16.5V14H28.25A1,1,0,0,1,29.25,15Z" fill="#4285f4" />
           </svg>
-          Sign up with Google
+          Log in with Google
         </Button>
       </div>
       <div className="text-center text-sm">

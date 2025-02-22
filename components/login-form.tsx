@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { login } from "@/lib/firebase";
+import { login, googleLogin } from "@/lib/firebase";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -21,6 +21,10 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
       ...prevData,
       [id]: value,
     }));
+  };
+  const handleGoogleLogin = async () => {
+    await googleLogin();
+    router.push("/dashboard");
   };
   return (
     <form className={cn("flex flex-col gap-6", className)} {...props} onSubmit={handleSubmit}>
@@ -48,7 +52,7 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
         <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
           <span className="relative z-10 bg-background px-2 text-muted-foreground">Or continue with</span>
         </div>
-        <Button variant="outline" className="w-full">
+        <Button variant="outline" className="w-full" type="button" onClick={handleGoogleLogin}>
           <svg width="800px" height="800px" viewBox="0 0 32 32" data-name="Layer 1" id="Layer_1" xmlns="http://www.w3.org/2000/svg">
             <path d="M23.75,16A7.7446,7.7446,0,0,1,8.7177,18.6259L4.2849,22.1721A13.244,13.244,0,0,0,29.25,16" fill="#00ac47" />
             <path d="M23.75,16a7.7387,7.7387,0,0,1-3.2516,6.2987l4.3824,3.5059A13.2042,13.2042,0,0,0,29.25,16" fill="#4285f4" />

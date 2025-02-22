@@ -2,7 +2,7 @@
 import { FirebaseError, initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getFirestore, setDoc, doc } from "firebase/firestore";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -23,6 +23,7 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const db = getFirestore(app);
 const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
 
 // Sign up a new user
 export async function signup(email: string, password: string) {
@@ -47,6 +48,18 @@ export async function login(email: string, password: string) {
   } catch (error) {
     if (error instanceof FirebaseError) {
       console.error("Error:", error.code, error.message);
+    } else {
+      console.error("An unknown error occurred");
+    }
+  }
+}
+
+export async function googleLogin() {
+  try {
+    await signInWithPopup(auth, provider);
+  } catch (error) {
+    if (error instanceof FirebaseError) {
+      console.error("Error", error.code, error.message);
     } else {
       console.error("An unknown error occurred");
     }
