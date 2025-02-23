@@ -33,11 +33,26 @@ export async function signup(email: string, password: string) {
     await setDoc(doc(db, "users", user.uid), {
       email: user.email,
     });
+    return { success: true };
   } catch (error) {
     if (error instanceof FirebaseError) {
-      console.error("Error:", error.code, error.message);
+      let message = "";
+      switch (error.code) {
+        case "auth/email-already-in-use":
+          message = "This email is already in use. Try logging in or use a different email.";
+          break;
+        case "auth/invalid-email":
+          message = "Invalid email address. Please check the format.";
+          break;
+        case "auth/too-many-requests":
+          message = "Too many requests. Please try again later.";
+          break;
+        default:
+          message = "An unexpected error occurred. Please try again.";
+      }
+      return { success: false, message: message };
     } else {
-      console.error("An unknown error occurred");
+      return { success: false, message: "An unknown error occured" };
     }
   }
 }
@@ -45,11 +60,23 @@ export async function signup(email: string, password: string) {
 export async function login(email: string, password: string) {
   try {
     await signInWithEmailAndPassword(auth, email, password);
+    return { success: true };
   } catch (error) {
     if (error instanceof FirebaseError) {
-      console.error("Error:", error.code, error.message);
+      let message = "";
+      switch (error.code) {
+        case "auth/invalid-credential":
+          message = "Invalid credentials. Check email and password.";
+          break;
+        case "auth/too-many-requests":
+          message = "Too many requests. Please try again later.";
+          break;
+        default:
+          message = "An unexpected error occurred. Please try again.";
+      }
+      return { success: false, message: message };
     } else {
-      console.error("An unknown error occurred");
+      return { success: false, message: "An unknown error occured" };
     }
   }
 }
@@ -57,11 +84,32 @@ export async function login(email: string, password: string) {
 export async function googleLogin() {
   try {
     await signInWithPopup(auth, provider);
+    return { success: true };
   } catch (error) {
     if (error instanceof FirebaseError) {
-      console.error("Error", error.code, error.message);
+      let message;
+      switch (error.code) {
+        case "auth/popup-closed-by-user":
+          message = "The login popup was closed before completing the login. Please try again.";
+          break;
+        case "auth/cancelled-popup-request":
+          message = "The login attempt was cancelled. Please try again.";
+          break;
+        case "auth/invalid-credential":
+          message = "Invalid Google credentials. Please try logging in again.";
+          break;
+        case "auth/account-exists-with-different-credential":
+          message = "An account already exists with this email. Please use a different sign-in method.";
+          break;
+        case "auth/too-many-requests":
+          message = "Too many requests. Please try again later.";
+          break;
+        default:
+          message = "An unexpected error occurred. Please try again.";
+      }
+      return { success: false, message: message};
     } else {
-      console.error("An unknown error occurred");
+      return { success: false, message: "An unknown error occured" };
     }
   }
 }

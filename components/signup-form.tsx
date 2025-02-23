@@ -6,14 +6,19 @@ import { Label } from "@/components/ui/label";
 import { signup, googleLogin } from "@/lib/firebase";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export function SignupForm({ className, ...props }: React.ComponentPropsWithoutRef<"form">) {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const router = useRouter();
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await signup(formData.email, formData.password);
-    router.push("/dashboard");
+    const result = await signup(formData.email, formData.password);
+    if (result.success) {
+      router.push("/dashboard");
+    } else {
+      toast.error(result.message);
+    }
   };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -23,8 +28,12 @@ export function SignupForm({ className, ...props }: React.ComponentPropsWithoutR
     }));
   };
   const handleGoogleLogin = async () => {
-    await googleLogin();
-    router.push("/dashboard");
+    const result = await googleLogin();
+    if (result.success) {
+      router.push("/dashboard");
+    } else {
+      toast.error(result.message);
+    }
   };
   return (
     <form className={cn("flex flex-col gap-6", className)} {...props} onSubmit={handleSubmit}>
