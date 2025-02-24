@@ -28,11 +28,7 @@ const provider = new GoogleAuthProvider();
 // Sign up a new user
 export async function signup(email: string, password: string) {
   try {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    const user = userCredential.user;
-    await setDoc(doc(db, "users", user.uid), {
-      email: user.email,
-    });
+    await createUserWithEmailAndPassword(auth, email, password);
     return { success: true };
   } catch (error) {
     if (error instanceof FirebaseError) {
