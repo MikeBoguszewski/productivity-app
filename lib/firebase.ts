@@ -2,7 +2,7 @@
 import { FirebaseError, initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getFirestore, setDoc, doc } from "firebase/firestore";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail } from "firebase/auth";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -103,7 +103,36 @@ export async function googleLogin() {
         default:
           message = "An unexpected error occurred. Please try again.";
       }
-      return { success: false, message: message};
+      return { success: false, message: message };
+    } else {
+      return { success: false, message: "An unknown error occured" };
+    }
+  }
+}
+
+export async function requestPasswordReset(email: string) {
+  try {
+    await sendPasswordResetEmail(auth, email);
+    return { sucess: true, message: "Password reset email sent!" };
+  } catch (error) {
+    let message;
+    if (error instanceof FirebaseError) {
+      switch (error.code) {
+        case "auth/user-not-found":
+          message = "No user found with that email address.";
+          break;
+        case "auth/invalid-email":
+          message = "Please enter a valid email address.";
+          break;
+        case "auth/too-many-requests":
+          message = "Too many requests. Please try again later.";
+          break;
+        default:
+          message = "An unexpected error occurred. Please try again.";
+          message = error.code;
+          break;
+      }
+      return { success: false, message: message };
     } else {
       return { success: false, message: "An unknown error occured" };
     }

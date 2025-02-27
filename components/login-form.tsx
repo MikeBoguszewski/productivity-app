@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import ForgotPassword from "@/components/forgot-password";
 import { login, googleLogin } from "@/lib/firebase";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -49,9 +50,7 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
         <div className="grid gap-2">
           <div className="flex items-center">
             <Label htmlFor="password">Password</Label>
-            <a href="#" className="ml-auto text-sm underline-offset-4 hover:underline">
-              Forgot your password?
-            </a>
+            <ForgotPassword />
           </div>
           <Input id="password" type="password" required value={formData.password} onChange={handleChange} />
         </div>
