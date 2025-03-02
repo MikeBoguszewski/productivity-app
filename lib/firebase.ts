@@ -2,7 +2,7 @@
 import { FirebaseError, initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getFirestore, setDoc, doc } from "firebase/firestore";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, updateProfile } from "firebase/auth";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -28,7 +28,13 @@ const provider = new GoogleAuthProvider();
 // Sign up a new user
 export async function signup(email: string, password: string) {
   try {
-    await createUserWithEmailAndPassword(auth, email, password);
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+
+    const displayName = email.split("@")[0];
+    await updateProfile(user, {
+      displayName: displayName,
+    });
     return { success: true };
   } catch (error) {
     if (error instanceof FirebaseError) {
