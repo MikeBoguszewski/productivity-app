@@ -17,9 +17,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <PageTitle />
           </div>
         </header>
-        <div className="flex flex-1 flex-col gap-4 p-4">
+        <div className="p-4">
           {children}
-          <div className="flex-1 rounded-xl bg-muted/50 md:min-h-min" />
         </div>
       </SidebarInset>
     </SidebarProvider>

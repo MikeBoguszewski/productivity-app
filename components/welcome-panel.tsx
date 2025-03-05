@@ -6,8 +6,9 @@ import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Clock } from "lucide-react";
 import { useState, useEffect } from "react";
+import { cn } from "@/lib/utils";
 
-export default function WelcomePanel() {
+export default function WelcomePanel({ className }: { className?: string }) {
   const { user, userLoading } = useAuth();
   const [time, setTime] = useState(new Date());
   const [quote, setQuote] = useState({ q: "", a: "" });
@@ -42,19 +43,19 @@ export default function WelcomePanel() {
   if (userLoading || quoteLoading) return <Skeleton className="h-[50vh] lg:h-[25vh]"></Skeleton>;
 
   return (
-    <Card className="rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 text-white lg:items-start max-h-[50vh] lg:max-h-[25vh] flex p-6 flex-col lg:flex-row flex-1 w-full">
-      <CardHeader className="lg:w-1/2 lg:h-full h-1/2 w-full flex-1 flex flex-col justify-start">
-        <div className="flex items-center gap-2 mb-2">
+    <Card className={cn("rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 text-white  flex p-6 flex-col w-full", className)}>
+      <CardHeader className="w-full flex flex-col justify-start">
+        <div className="flex items-center gap-2 pb-2">
           <Clock className="size-6" />
           <span className="text-xl">{time.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</span>
         </div>
         <h1 className="text-4xl font-bold h-full line-clamp-3">
-          {getGreeting()} {"," + user?.displayName || ""}
+          {getGreeting()}
+          {", " + user?.displayName || ""}
         </h1>
       </CardHeader>
-      <Separator orientation="horizontal" className="lg:hidden" />
-      <Separator orientation="vertical" className="hidden lg:block" />
-      <div className="p-0 max-w-full lg:w-1/2 h-1/2 flex-1">
+      <Separator orientation="horizontal" />
+      <div className="p-0 max-w-full flex-1 flex flex-col pt-3">
         <CardContent>
           <div className="text-xl p-3">
             {quote ? (
@@ -70,8 +71,8 @@ export default function WelcomePanel() {
             )}
           </div>
         </CardContent>
-        <CardFooter>
-          <div className="italic text-base">
+        <CardFooter className="mt-auto">
+          <div className="italic text-base align-bottom-end">
             Inspirational quotes provided by{" "}
             <a className="underline" href="https://zenquotes.io/" target="_blank" rel="noopener noreferrer">
               ZenQuotes API
