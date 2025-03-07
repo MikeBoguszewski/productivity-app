@@ -1,9 +1,26 @@
-export default function TasksPage() {
+import { Task, columns } from "@/components/tasks/columns";
+import { DataTable } from "@/components/tasks/data-table";
+
+async function getData(): Promise<Task[]> {
+  // Fetch data from your API here.
+  return [
+    {
+      id: "728ed52f",
+      task: "Homework",
+      priority: "High",
+    },
+    {
+      id: "728ed52f",
+      task: "Homework",
+      priority: "Low",
+    },
+  ];
+}
+
+export default async function DemoPage() {
+  const data = await getData();
+
   return (
-    <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-      <div className="aspect-video rounded-xl bg-muted/50" />
-      <div className="aspect-video rounded-xl bg-muted/50" />
-      <div className="aspect-video rounded-xl bg-muted/50" />
-    </div>
+      <DataTable columns={columns} initialData={data} />
   );
 }
