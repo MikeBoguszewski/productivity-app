@@ -4,13 +4,13 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export default function AuthCheck() {
-  const { user, loading } = useAuth();
+  const { user, userLoading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (!loading && !user) {
+    if (!userLoading && !user) {
       router.push("/login");
     }
-  }, [loading, user, router]);
+  }, [userLoading, user, router]);
   return null;
 }

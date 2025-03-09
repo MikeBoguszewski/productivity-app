@@ -1,8 +1,9 @@
 // Import the functions you need from the SDKs you need
 import { FirebaseError, initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getFirestore, setDoc, doc } from "firebase/firestore";
+import { getFirestore, setDoc, doc, collection, where, query, onSnapshot } from "firebase/firestore";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, updateProfile } from "firebase/auth";
+import { Task } from "@/components/tasks/columns";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -20,7 +21,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+// const analytics = getAnalytics(app);
 const db = getFirestore(app);
 export const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
@@ -142,5 +143,51 @@ export async function requestPasswordReset(email: string) {
     } else {
       return { success: false, message: "An unknown error occured" };
     }
+  }
+}
+
+export async function addTask(task: string) {
+  const user = auth.currentUser;
+  if (!user) {
+    return { success: false, message: "You must be logged in to add a task." };
+  }
+  const userId = user.uid;
+  try {
+    const docRef = collection(db, "tasks");
+    const newDocRef = await doc(docRef);
+    await setDoc(newDocRef, { task: task, userId: userId });
+    return { success: true };
+  } catch {
+    return { success: false, message: "An unexpected error occurred. Please try again." };
+  }
+}
+
+export function listenForTasks(callback: (tasks: Task[]) => void): { success: boolean; unsubscribe: () => void } {
+  try {
+    const user = auth.currentUser;
+    if (!user) {
+      console.error(auth);
+      return { success: false, unsubscribe: () => {} };
+    }
+    const userId = user.uid;
+    const docRef = collection(db, "tasks");
+    const q = query(docRef, where("userId", "==", userId));
+
+    let tasks: Task[] = [];
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      tasks = snapshot.docs.map((doc) => {
+        const data = doc.data();
+        return {
+          id: doc.id,
+          task: data.task,
+        };
+      });
+      callback(tasks);
+    });
+
+    return { success: true, unsubscribe: unsubscribe };
+  } catch (error) {
+    console.error(error);
+    return { success: false, unsubscribe: () => {} };
   }
 }

@@ -23,7 +23,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
     return () => unsubscribe();
   }, []);
 
-  return <AuthContext.Provider value={{ user, loading: userLoading }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ user, userLoading: userLoading }}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {

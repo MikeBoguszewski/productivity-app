@@ -6,17 +6,12 @@ import { Checkbox } from "@/components/ui/checkbox"
 export type Task = {
   id: string
   task: string
-  priority: "High" | "Medium" | "Low"
 }
 
 export const columns: ColumnDef<Task>[] = [
   {
     accessorKey: "task",
     header: "Task",
-  },
-  {
-    accessorKey: "priority",
-    header: "Priority",
   },
     {
     id: "select",

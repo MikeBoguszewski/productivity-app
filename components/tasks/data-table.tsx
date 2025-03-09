@@ -2,18 +2,18 @@
 
 import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { Card, CardTitle } from "@/components/ui/card";
+import  AddTask from "@/components/tasks/add-task";
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import React from "react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
-  initialData: TData[];
+  data: TData[];
 }
 
-export function DataTable<TData, TValue>({ columns, initialData }: DataTableProps<TData, TValue>) {
+export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
-  const [data, setData] = React.useState<TData[]>(initialData);
   const table = useReactTable({
     data,
     columns,
@@ -26,8 +26,9 @@ export function DataTable<TData, TValue>({ columns, initialData }: DataTableProp
 
   return (
     <Card className="container mx-auto p-10 flex-1">
-      <div className="flex justify-between items-center">
-        <CardTitle className="text-3xl">To-Do List</CardTitle>
+      <div className="flex justify-between items-center mb-5">
+        <CardTitle className="text-3xl w-full">To-Do List</CardTitle>
+        <AddTask />
       </div>
 
       <div className="rounded-md border">
