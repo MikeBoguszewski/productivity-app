@@ -11,14 +11,11 @@ export default function TasksPage() {
   const [data, setData] = useState<Task[]>([]);
   const unsubscribeRef = useRef<(() => void) | null>(null);
   useEffect(() => {
-    console.log(userLoading)
     if (userLoading) return
     const { success,  unsubscribe } = listenForTasks((tasks) => {
       setData(tasks);
     });
     unsubscribeRef.current = unsubscribe;
-    console.log(success);
-    console.log(data)
     if (success) {
       setData(data);
     }

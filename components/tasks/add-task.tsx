@@ -9,7 +9,7 @@ export default function AddTask() {
     e.preventDefault();
     const result = await addTask(task);
     if (result.success) {
-      toast.success("Task added successfully");
+      toast.success("Task added successfully.");
       setTask("")
     } else {
       toast.error(result.message);

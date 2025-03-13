@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { FirebaseError, initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getFirestore, setDoc, doc, collection, where, query, onSnapshot } from "firebase/firestore";
+import { getFirestore, setDoc, doc, collection, where, query, onSnapshot, deleteDoc } from "firebase/firestore";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, updateProfile } from "firebase/auth";
 import { Task } from "@/components/tasks/columns";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -162,7 +162,7 @@ export async function addTask(task: string) {
   }
 }
 
-export function listenForTasks(callback: (tasks: Task[]) => void): { success: boolean; unsubscribe: () => void } {
+export function listenForTasks(callback: (tasks: Task[]) => void) {
   try {
     const user = auth.currentUser;
     if (!user) {
@@ -187,7 +187,19 @@ export function listenForTasks(callback: (tasks: Task[]) => void): { success: bo
 
     return { success: true, unsubscribe: unsubscribe };
   } catch (error) {
-    console.error(error);
     return { success: false, unsubscribe: () => {} };
+  }
+}
+
+export async function deleteTasks(ids: string[]) {
+  try {
+    await Promise.all(
+      ids.map(async (id) => {
+        await deleteDoc(doc(db, "tasks", id));
+      })
+    );
+    return { success: true };
+  } catch (error) {
+    return { success: false, message: "An unexpected error occurred. Please try again." };
   }
 }

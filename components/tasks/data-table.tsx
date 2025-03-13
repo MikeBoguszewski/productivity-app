@@ -2,7 +2,8 @@
 
 import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { Card, CardTitle } from "@/components/ui/card";
-import  AddTask from "@/components/tasks/add-task";
+import AddTask from "@/components/tasks/add-task";
+import DeleteTask from "@/components/tasks/delete-task";
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import React from "react";
@@ -23,12 +24,13 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
       rowSelection,
     },
   });
-
+  const selectedData = table.getSelectedRowModel().rows.map((row) => row.original);
   return (
     <Card className="container mx-auto p-10 flex-1">
       <div className="flex justify-between items-center mb-5">
         <CardTitle className="text-3xl w-full">To-Do List</CardTitle>
         <AddTask />
+        <DeleteTask isDisabled={table.getSelectedRowModel().rows.length === 0} selectedTasks={selectedData} />
       </div>
 
       <div className="rounded-md border">
