@@ -1,5 +1,4 @@
 "use client";
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useTimer } from "react-timer-hook";
@@ -14,7 +13,6 @@ export default function Timer() {
   const { totalSeconds, milliseconds, seconds, minutes, hours, days, isRunning, start, pause, resume, restart } = useTimer({ expiryTimestamp, onExpire: () => console.warn("onExpire called"), interval: 20, autoStart: false });
 
   const handleMinutesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
     console.log(e.target.value);
     if (/^\d*$/.test(e.target.value) && (e.target.value === "" || (parseInt(e.target.value) >= 0 && parseInt(e.target.value) <= 999))) {
       setMinutesInput(e.target.value);
@@ -32,10 +30,10 @@ export default function Timer() {
   const formattedTime = `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
 
   return (
-    <Card className="flex items-center justify-center w-full max-w-96 h-96 flex-col">
+    <div className="flex items-center justify-center w-full flex-col">
       <DropdownMenu>
         <div className="flex flex-row items-center justify-center mb-16 gap-4">
-          <span className="text-6xl font-bold">{formattedTime}</span>
+          <span className="text-7xl sm:text-8xl font-bold">{formattedTime}</span>
           <DropdownMenuTrigger>
             <Ellipsis />
           </DropdownMenuTrigger>
@@ -70,6 +68,6 @@ export default function Timer() {
           <TimerReset size={10} />
         </Button>
       </div>
-    </Card>
+    </div>
   );
 }

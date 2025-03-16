@@ -17,7 +17,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <PageTitle />
           </div>
         </header>
-        <div className="p-4">
+        <div className="p-4 h-full">
           {children}
         </div>
       </SidebarInset>
