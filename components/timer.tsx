@@ -3,14 +3,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useTimer } from "react-timer-hook";
 import { Play, Pause, Ellipsis, TimerReset } from "lucide-react";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Label } from "@/components/ui/label";
 import { useState, useEffect } from "react";
+import { incrementFocusTime } from "@/lib/firebase";
 
 export default function Timer() {
   const [minutesInput, setMinutesInput] = useState("30");
   const [expiryTimestamp, setExpiryTimestamp] = useState(new Date());
-  const { totalSeconds, milliseconds, seconds, minutes, hours, days, isRunning, start, pause, resume, restart } = useTimer({ expiryTimestamp, onExpire: () => console.warn("onExpire called"), interval: 20, autoStart: false });
+  const { seconds, minutes, hours, days, isRunning, start, pause, resume, restart } = useTimer({ expiryTimestamp, onExpire: () => console.warn("onExpire called"), interval: 20, autoStart: false });
 
   const handleMinutesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     console.log(e.target.value);
@@ -18,6 +19,18 @@ export default function Timer() {
       setMinutesInput(e.target.value);
     }
   };
+
+  useEffect(() => {
+    if (!isRunning) {
+      return;
+    } else {
+      const intervalId = setInterval(() => {
+        const result = incrementFocusTime();
+        console.log(result);
+      }, 60000);
+      return () => clearInterval(intervalId);
+    }
+  }, [isRunning]);
 
   useEffect(() => {
     const updatedExpiry = new Date();

@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { FirebaseError, initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getFirestore, setDoc, doc, collection, where, query, onSnapshot, deleteDoc } from "firebase/firestore";
+import { getFirestore, setDoc, doc, collection, where, query, onSnapshot, deleteDoc, increment } from "firebase/firestore";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, updateProfile } from "firebase/auth";
 import { Task } from "@/components/tasks/columns";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -198,6 +198,25 @@ export async function deleteTasks(ids: string[]) {
         await deleteDoc(doc(db, "tasks", id));
       })
     );
+    return { success: true };
+  } catch (error) {
+    return { success: false, message: "An unexpected error occurred. Please try again." };
+  }
+}
+
+export async function incrementFocusTime() {
+  const user = auth.currentUser;
+  if (!user) {
+    return { success: false, message: "You must be logged in to update your focus time." };
+  }
+  const userId = user.uid;
+  try {
+    const statsRef = collection(db, "stats");
+    const statsDoc = doc(statsRef, userId);
+    const dailyFocusRef = collection(statsDoc, "dailyFocus");
+    const dailyFocusDoc = doc(dailyFocusRef, new Date().toISOString().split("T")[0]);
+    await setDoc(statsDoc, { totalMinutesFocused: increment(1) }, { merge: true });
+    await setDoc(dailyFocusDoc, { minutesFocused: increment(1) }, { merge: true });
     return { success: true };
   } catch (error) {
     return { success: false, message: "An unexpected error occurred. Please try again." };
