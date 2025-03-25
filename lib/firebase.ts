@@ -222,3 +222,19 @@ export async function incrementFocusTime() {
     return { success: false, message: "An unexpected error occurred. Please try again." };
   }
 }
+
+export async function incrementTasksCompleted(taskCount: number) {
+  const user = auth.currentUser;
+  if (!user) {
+    return { success: false, message: "You must be logged in to update your tasks completed." };
+  }
+  const userId = user.uid;
+  try {
+    const statsRef = collection(db, "stats");
+    const statsDoc = doc(statsRef, userId);
+    await setDoc(statsDoc, { totalTasksCompleted: increment(taskCount) }, { merge: true });
+    return { success: true };
+  } catch (error) {
+    return { success: false, message: "An unexpected error occurred. Please try again." };
+  }
+}

@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { deleteTasks } from "@/lib/firebase";
 import { toast } from "sonner";
+import { incrementTasksCompleted } from "@/lib/firebase";
 
 interface Task {
   id: string;
@@ -17,6 +18,7 @@ export default function DeleteTask<TData extends Task>({ isDisabled, selectedTas
   const handleDelete = async () => {
     const result = await deleteTasks(selectedIds)
     if (result.success) {
+      await incrementTasksCompleted(selectedIds.length);
       toast.success("Tasks deleted successfully.");
     } else {
       toast.error(result.message);
