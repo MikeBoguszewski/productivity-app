@@ -1,9 +1,10 @@
 // Import the functions you need from the SDKs you need
 import { FirebaseError, initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getFirestore, setDoc, doc, collection, where, query, onSnapshot, deleteDoc, increment } from "firebase/firestore";
+import { getFirestore, setDoc, doc, collection, where, query, onSnapshot, deleteDoc, increment, orderBy, limit, getDocs, getDoc } from "firebase/firestore";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, updateProfile } from "firebase/auth";
 import { Task } from "@/components/tasks/columns";
+import { ChartData } from "@/components/focus-chart";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -236,5 +237,110 @@ export async function incrementTasksCompleted(taskCount: number) {
     return { success: true };
   } catch (error) {
     return { success: false, message: "An unexpected error occurred. Please try again." };
+  }
+}
+
+export async function fetchDailyStats(): Promise<ChartData[]> {
+  const user = auth.currentUser;
+  if (!user) {
+    return [];
+  }
+  const userId = user.uid;
+  try {
+    const statsRef = collection(db, "stats");
+    const statsDoc = doc(statsRef, userId);
+    const dailyFocusRef = collection(statsDoc, "dailyFocus");
+    const dailyStats = [];
+    for (let i = 0; i < 7; i++) {
+      const date = new Date();
+      date.setDate(date.getDate() - i);
+      const day = date.toISOString().split("T")[0];
+      const docRef = doc(dailyFocusRef, day);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        dailyStats.push({
+          date: day,
+          minutesFocused: data.minutesFocused,
+        });
+      } else {
+        dailyStats.push({
+          date: day,
+          minutesFocused: 0,
+        });
+      }
+    }
+    return dailyStats;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+}
+
+export async function fetchTotalFocusTime(): Promise<number | null> {
+  const user = auth.currentUser;
+  if (!user) {
+    return null;
+  }
+  const userId = user.uid;
+  try {
+    const statsRef = collection(db, "stats");
+    const statsDoc = doc(statsRef, userId);
+    const docSnap = await getDoc(statsDoc);
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      return data.totalMinutesFocused;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
+export async function fetchTasksCompleted(): Promise<number | null> {
+  const user = auth.currentUser;
+  if (!user) {
+    return null;
+  }
+  const userId = user.uid;
+  try {
+    const statsRef = collection(db, "stats");
+    const statsDoc = doc(statsRef, userId);
+    const docSnap = await getDoc(statsDoc);
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      return data.totalTasksCompleted;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
+export async function fetchRecentTasks(): Promise<Task[]> {
+  const user = auth.currentUser;
+  if (!user) {
+    return [];
+  }
+  const userId = user.uid;
+  try {
+    const docRef = collection(db, "tasks");
+    const q = query(docRef, where("userId", "==", userId), limit(5));
+    const snapshot = await getDocs(q);
+    const tasks = snapshot.docs.map((doc) => {
+      const data = doc.data();
+      return {
+        id: doc.id,
+        task: data.task,
+      };
+    });
+    return tasks;
+  } catch (error) {
+    console.error(error);
+    return [];
   }
 }

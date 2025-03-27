@@ -2,7 +2,7 @@ import WelcomePanel from "@/components/welcome-panel";
 import TimeFocused from "@/components/time-focused";
 import RecentTasks from "@/components/recent-tasks";
 import TasksCompleted from "@/components/tasks-completed";
-import { HoursChart } from "@/components/hours-chart";
+import { FocusChart } from "@/components/focus-chart";
 
 export default function DashboardPage() {
   return (
@@ -13,7 +13,7 @@ export default function DashboardPage() {
         <TasksCompleted className="flex-1" />
       </div>
       <RecentTasks />
-      <HoursChart />
+      <FocusChart />
     </div>
   );
 }
