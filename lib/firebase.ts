@@ -4,7 +4,7 @@ import { getAnalytics } from "firebase/analytics";
 import { getFirestore, setDoc, doc, collection, where, query, onSnapshot, deleteDoc, increment, orderBy, limit, getDocs, getDoc } from "firebase/firestore";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, updateProfile } from "firebase/auth";
 import { Task } from "@/components/tasks/columns";
-import { ChartData } from "@/components/focus-chart";
+import { ChartData } from "@/components/dashboard/focus-chart";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 

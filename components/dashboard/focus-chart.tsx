@@ -9,6 +9,8 @@ import { useState, useEffect } from "react";
 import { fetchDailyStats } from "@/lib/firebase";
 import { useAuth } from "@/hooks/use-auth";
 import { ChartBar } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
 
 const chartConfig = {
   minutesFocused: {
@@ -22,20 +24,24 @@ export type ChartData = {
   minutesFocused: number;
 };
 
-export function FocusChart() {
+export function FocusChart({ className }: { className?: string }) {
   const [chartData, setChartData] = useState<ChartData[]>([]);
   const { userLoading } = useAuth();
+  const [chartDataLoading, setChartDataLoading] = useState(true);
   useEffect(() => {
     if (userLoading) return;
     async function fetchData() {
       const data = await fetchDailyStats();
       console.log(data);
       setChartData(data);
+      setChartDataLoading(false);
     }
     fetchData();
   }, [userLoading]);
+
+  if (userLoading || chartDataLoading) return <Skeleton className={cn("", className)}></Skeleton>;
   return (
-    <Card>
+    <Card className={cn("", className)}>
       <CardHeader>
         <div className="flex flex-row items-center justify-between">
           <CardTitle>Minutes Focused</CardTitle>

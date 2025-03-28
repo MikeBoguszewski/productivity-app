@@ -8,8 +8,9 @@ import React from "react";
 import { fetchRecentTasks } from "@/lib/firebase";
 import { useAuth } from "@/hooks/use-auth";
 import { useEffect, useState } from "react";
-
 import { ColumnDef } from "@tanstack/react-table";
+import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
 
 export type Task = {
   id: string;
@@ -24,15 +25,17 @@ const columns: ColumnDef<Task>[] = [
 ];
 
 
-export default function RecentTasks() {
+export default function RecentTasks({ className }: { className?: string }) {
   const [recentTasks, setRecentTasks] = useState<Task[]>([]);
   const { userLoading } = useAuth();
+  const [recentTasksLoading, setRecentTasksLoading] = useState(true);
   useEffect(() => {
     if (userLoading) return;
     async function fetchData() {
       const data = await fetchRecentTasks();
       console.log(data);
       setRecentTasks(data);
+      setRecentTasksLoading(false);
     }
     fetchData();
   }, [userLoading]);
@@ -42,8 +45,10 @@ export default function RecentTasks() {
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
+
+  if (userLoading || recentTasksLoading) return <Skeleton className={cn("", className)}></Skeleton>;
   return (
-    <Card className="p-2">
+    <Card className={cn("p-2", className)}>
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="text-xl">Recent Tasks</CardTitle>
         <ClipboardList className="size-6" />

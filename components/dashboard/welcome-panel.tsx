@@ -40,10 +40,10 @@ export default function WelcomePanel({ className }: { className?: string }) {
     return "Good evening";
   };
 
-  if (userLoading || quoteLoading) return <Skeleton className="h-[50vh] lg:h-[25vh]"></Skeleton>;
+  if (userLoading || quoteLoading) return <Skeleton className={cn(className)}></Skeleton>;
 
   return (
-    <Card className={cn("rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 text-white  flex p-6 flex-col w-full", className)}>
+    <Card className={cn("rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 text-white flex p-6 flex-col", className)}>
       <CardHeader className="w-full flex flex-col justify-start">
         <div className="flex items-center gap-2 pb-2">
           <Clock className="size-6" />
