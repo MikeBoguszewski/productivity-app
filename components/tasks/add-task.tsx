@@ -7,6 +7,10 @@ export default function AddTask() {
   const [task, setTask] = useState("");
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (task.trim() === "") {
+      toast.error("Please enter a task.");
+      return;
+    }
     const result = await addTask(task);
     if (result.success) {
       toast.success("Task added successfully.");

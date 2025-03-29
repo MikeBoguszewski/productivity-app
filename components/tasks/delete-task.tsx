@@ -19,7 +19,7 @@ export default function DeleteTask<TData extends Task>({ isDisabled, selectedTas
     const result = await deleteTasks(selectedIds)
     if (result.success) {
       await incrementTasksCompleted(selectedIds.length);
-      toast.success("Tasks deleted successfully.");
+      toast.success("Task(s) deleted successfully.");
     } else {
       toast.error(result.message);
     }

@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { FirebaseError, initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getFirestore, setDoc, doc, collection, where, query, onSnapshot, deleteDoc, increment, orderBy, limit, getDocs, getDoc } from "firebase/firestore";
+import { getFirestore, setDoc, doc, collection, where, query, onSnapshot, deleteDoc, increment, orderBy, limit, getDocs, getDoc, serverTimestamp } from "firebase/firestore";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, updateProfile } from "firebase/auth";
 import { Task } from "@/components/tasks/columns";
 import { ChartData } from "@/components/dashboard/focus-chart";
@@ -156,7 +156,7 @@ export async function addTask(task: string) {
   try {
     const docRef = collection(db, "tasks");
     const newDocRef = await doc(docRef);
-    await setDoc(newDocRef, { task: task, userId: userId });
+    await setDoc(newDocRef, { task: task, userId: userId, createdAt: serverTimestamp() });
     return { success: true };
   } catch {
     return { success: false, message: "An unexpected error occurred. Please try again." };
@@ -172,7 +172,7 @@ export function listenForTasks(callback: (tasks: Task[]) => void) {
     }
     const userId = user.uid;
     const docRef = collection(db, "tasks");
-    const q = query(docRef, where("userId", "==", userId));
+    const q = query(docRef, where("userId", "==", userId), orderBy("createdAt", "desc"));
 
     let tasks: Task[] = [];
     const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -329,7 +329,7 @@ export async function fetchRecentTasks(): Promise<Task[]> {
   const userId = user.uid;
   try {
     const docRef = collection(db, "tasks");
-    const q = query(docRef, where("userId", "==", userId), limit(5));
+    const q = query(docRef, where("userId", "==", userId), limit(5), orderBy("createdAt", "desc"));
     const snapshot = await getDocs(q);
     const tasks = snapshot.docs.map((doc) => {
       const data = doc.data();

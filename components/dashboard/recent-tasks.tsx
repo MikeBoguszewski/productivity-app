@@ -48,7 +48,7 @@ export default function RecentTasks({ className }: { className?: string }) {
 
   if (userLoading || recentTasksLoading) return <Skeleton className={cn("", className)}></Skeleton>;
   return (
-    <Card className={cn("p-2", className)}>
+    <Card className={cn("p-2 h-full", className)}>
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="text-xl">Recent Tasks</CardTitle>
         <ClipboardList className="size-6" />
@@ -75,8 +75,8 @@ export default function RecentTasks({ className }: { className?: string }) {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
-                  No results.
+                <TableCell colSpan={columns.length} className="h-64 text-center">
+                  No tasks.
                 </TableCell>
               </TableRow>
             )}
