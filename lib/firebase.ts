@@ -2,7 +2,7 @@
 import { FirebaseError, initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getFirestore, setDoc, doc, collection, where, query, onSnapshot, deleteDoc, increment, orderBy, limit, getDocs, getDoc, serverTimestamp } from "firebase/firestore";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, updateProfile } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, updateProfile, signOut } from "firebase/auth";
 import { Task } from "@/components/tasks/columns";
 import { ChartData } from "@/components/dashboard/focus-chart";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -56,7 +56,7 @@ export async function signup(email: string, password: string) {
       }
       return { success: false, message: message };
     } else {
-      return { success: false, message: "An unknown error occured" };
+      return { success: false, message: "An unknown error occured." };
     }
   }
 }
@@ -80,7 +80,7 @@ export async function login(email: string, password: string) {
       }
       return { success: false, message: message };
     } else {
-      return { success: false, message: "An unknown error occured" };
+      return { success: false, message: "An unknown error occured." };
     }
   }
 }
@@ -113,7 +113,7 @@ export async function googleLogin() {
       }
       return { success: false, message: message };
     } else {
-      return { success: false, message: "An unknown error occured" };
+      return { success: false, message: "An unknown error occured." };
     }
   }
 }
@@ -142,8 +142,17 @@ export async function requestPasswordReset(email: string) {
       }
       return { success: false, message: message };
     } else {
-      return { success: false, message: "An unknown error occured" };
+      return { success: false, message: "An unknown error occured." };
     }
+  }
+}
+
+export async function logout() {
+  try {
+    await signOut(auth);
+    return { success: true, message: "Logged out successfully." };
+  } catch (error) {
+    return { success: false, message: "An unknown error occurred." };
   }
 }
 

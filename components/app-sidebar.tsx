@@ -1,16 +1,8 @@
-import * as React from "react"
-import { MountainSnow, LayoutDashboard, ListChecks, BrainCircuit } from "lucide-react"
+import * as React from "react";
+import { MountainSnow, LayoutDashboard, ListChecks, BrainCircuit, LogOut } from "lucide-react";
 
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarGroup,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarRail,
-} from "@/components/ui/sidebar"
+import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarRail } from "@/components/ui/sidebar";
+import LogoutMenu from "@/components/logout-menu";
 
 const data = {
   navMain: [
@@ -28,9 +20,9 @@ const data = {
       title: "Focus",
       url: "/dashboard/focus",
       icon: BrainCircuit,
-    }
-  ]
-}
+    },
+  ],
+};
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
@@ -65,6 +57,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter>
+        <LogoutMenu />
+      </SidebarFooter>
       <SidebarRail />
     </Sidebar>
   );
