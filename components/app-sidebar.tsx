@@ -1,5 +1,5 @@
 import * as React from "react"
-import { GalleryVerticalEnd, LayoutDashboard, ListChecks, BrainCircuit } from "lucide-react"
+import { MountainSnow, LayoutDashboard, ListChecks, BrainCircuit } from "lucide-react"
 
 import {
   Sidebar,
@@ -41,9 +41,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarMenuButton size="lg" asChild>
               <a>
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                  <GalleryVerticalEnd className="size-4" />
+                  <MountainSnow className="size-4" />
                 </div>
-                <span className="font-semibold">Focus App</span>
+                <span className="font-semibold">PeakFocus</span>
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>
