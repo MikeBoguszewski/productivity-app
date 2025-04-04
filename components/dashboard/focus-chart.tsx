@@ -42,13 +42,12 @@ export function FocusChart({ className }: { className?: string }) {
   if (userLoading || chartDataLoading) return <Skeleton className={cn("", className)}></Skeleton>;
   return (
     <Card className={cn("", className)}>
-      <CardHeader>
-        <div className="flex flex-row items-center justify-between">
-          <CardTitle>Minutes Focused</CardTitle>
-          <ChartBar className="size-6" />
+      <CardHeader className="flex justify-between flex-row">
+        <div className="flex flex-col justify-between gap-2">
+          <CardTitle className="text-xl">Minutes Focused</CardTitle>
+          <CardDescription>Total focused time tracked over the last 7 days.</CardDescription>
         </div>
-
-        <CardDescription>Total focused time tracked over the last 7 days.</CardDescription>
+        <ChartBar className="size-6" />
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig} className="min-h-[200px] w-full">

@@ -48,12 +48,12 @@ export default function RecentTasks({ className }: { className?: string }) {
 
   if (userLoading || recentTasksLoading) return <Skeleton className={cn("", className)}></Skeleton>;
   return (
-    <Card className={cn("p-2 h-full", className)}>
+    <Card className={cn("h-full", className)}>
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="text-xl">Recent Tasks</CardTitle>
         <ClipboardList className="size-6" />
       </CardHeader>
-      <div className="rounded-md border">
+      <div className="rounded-md border m-2">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

@@ -23,16 +23,16 @@ export default function TimeFocused({ className }: { className?: string }) {
   }, [userLoading]);
   const formattedTimeFocused = timeFocused !== null 
     ? (timeFocused > 1 ? `${timeFocused} Minutes` : `${timeFocused} Minute`) 
-    : "No data";
+    : "0";
 
   if (userLoading || timeFocusedLoading) return <Skeleton className={cn(className)}></Skeleton>;
   return (
-    <Card className={cn("", className)}>
+    <Card className={cn(className)}>
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="text-xl">Total Time Focused</CardTitle>
         <Clock4 className="size-6" />
       </CardHeader>
-      <CardContent className="font-bold text-4xl">{formattedTimeFocused}</CardContent>
+      <CardContent className="font-bold text-4xl h-full pt-3">{formattedTimeFocused}</CardContent>
     </Card>
   );
 }

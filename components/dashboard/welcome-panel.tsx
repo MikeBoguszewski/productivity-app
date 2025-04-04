@@ -55,9 +55,9 @@ export default function WelcomePanel({ className }: { className?: string }) {
         </h1>
       </CardHeader>
       <Separator orientation="horizontal" />
-      <div className="p-0 max-w-full flex-1 flex flex-col pt-3">
+      <div className="max-w-full h-full flex-1 flex justify-center flex-col pt-3">
         <CardContent>
-          <div className="text-xl p-3">
+          <div className="text-xl p-3 flex items-center h-full">
             {quote ? (
               <blockquote className="line-clamp-4">
                 &quot;{quote.q}&quot;
@@ -71,8 +71,8 @@ export default function WelcomePanel({ className }: { className?: string }) {
             )}
           </div>
         </CardContent>
-        <CardFooter className="mt-auto">
-          <div className="italic text-base align-bottom-end">
+        <CardFooter>
+          <div className="italic text-base">
             Inspirational quotes provided by{" "}
             <a className="underline" href="https://zenquotes.io/" target="_blank" rel="noopener noreferrer">
               ZenQuotes API

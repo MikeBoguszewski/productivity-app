@@ -28,7 +28,7 @@ export default function TasksCompleted({ className }: { className?: string }) {
         <CardTitle className="text-xl">Tasks Completed</CardTitle>
         <CheckCircle className="size-6" />
       </CardHeader>
-      <CardContent className="font-bold text-4xl">{tasksCompleted} Tasks</CardContent>
+      <CardContent className="font-bold text-4xl pt-3">{tasksCompleted} Tasks</CardContent>
     </Card>
   );
 }

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { MountainSnow, LayoutDashboard, ListChecks, BrainCircuit, LogOut } from "lucide-react";
+import { MountainSnow, LayoutDashboard, ListChecks, BrainCircuit } from "lucide-react";
 
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarRail } from "@/components/ui/sidebar";
 import LogoutMenu from "@/components/logout-menu";
