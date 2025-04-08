@@ -3,7 +3,7 @@
 import { FirebaseError, initializeApp } from "firebase/app";
 // import { getAnalytics } from "firebase/analytics";
 import { getFirestore, setDoc, doc, collection, where, query, onSnapshot, deleteDoc, increment, orderBy, limit, getDocs, getDoc, serverTimestamp } from "firebase/firestore";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, updateProfile, signOut } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithRedirect, sendPasswordResetEmail, updateProfile, signOut, getRedirectResult } from "firebase/auth";
 import { Task } from "@/components/tasks/columns";
 import { ChartData } from "@/components/dashboard/focus-chart";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -13,7 +13,7 @@ import { ChartData } from "@/components/dashboard/focus-chart";
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyAQITx3VyIr-H9mYDA_SJNG1sbVyd6i7yA",
-  authDomain: "productivityapp-f2a7c.firebaseapp.com",
+  authDomain: "productivity-app-alpha-nine.vercel.app",
   projectId: "productivityapp-f2a7c",
   storageBucket: "productivityapp-f2a7c.firebasestorage.app",
   messagingSenderId: "754523731628",
@@ -88,36 +88,53 @@ export async function login(email: string, password: string) {
 
 export async function googleLogin() {
   try {
-    await signInWithPopup(auth, provider);
+    console.log(window.location.href);
+    await signInWithRedirect(auth, provider);
     return { success: true };
   } catch (error) {
     if (error instanceof FirebaseError) {
       let message;
       switch (error.code) {
-        case "auth/popup-closed-by-user":
-          message = "The login popup was closed before completing the login. Please try again.";
-          break;
-        case "auth/cancelled-popup-request":
-          message = "The login attempt was cancelled. Please try again.";
-          break;
-        case "auth/invalid-credential":
-          message = "Invalid Google credentials. Please try logging in again.";
-          break;
         case "auth/account-exists-with-different-credential":
           message = "An account already exists with this email. Please use a different sign-in method.";
+          break;
+        case "auth/invalid-credential":
+          message = "Invalid credentials provided. Please try logging in again.";
           break;
         case "auth/too-many-requests":
           message = "Too many requests. Please try again later.";
           break;
+        case "auth/user-disabled":
+          message = "Your account has been disabled. Please contact support.";
+          break;
+        case "auth/network-request-failed":
+          message = "Network error. Please check your internet connection and try again.";
+          break;
+        case "auth/operation-not-allowed":
+          message = "This login method is not enabled. Please contact support.";
+          break;
         default:
-          message = "An unexpected error occurred. Please try again.";
+          message = "An unexpected error occurred. Please try again later.";
       }
+
       return { success: false, message: message };
     } else {
-      return { success: false, message: "An unknown error occured." };
+      return { success: false, message: "An unknown error occurred. Please try again later." };
     }
   }
 }
+
+export async function checkRedirectLogin() {
+  try {
+    const result = await getRedirectResult(auth);
+    // if (result?.user) {
+    //   console.log("Signed in with redirect:", result.user);
+    // }
+  } catch (error) {
+    // console.error("Redirect error", error);
+  }
+}
+
 
 export async function requestPasswordReset(email: string) {
   try {

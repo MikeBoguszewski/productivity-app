@@ -2,7 +2,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { User } from "firebase/auth";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "@/lib/firebase";
+import { auth, checkRedirectLogin } from "@/lib/firebase";
 import { ReactNode } from "react";
 
 export const AuthContext = createContext<{ user: User | null; userLoading: boolean }>({
@@ -15,6 +15,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
   const [userLoading, setUserLoading] = useState(true);
 
   useEffect(() => {
+    checkRedirectLogin();
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
       setUserLoading(false);

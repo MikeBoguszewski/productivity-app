@@ -3,10 +3,12 @@ import { MountainSnow } from "lucide-react";
 import { SignupForm } from "@/components/signup-form";
 import Link from "next/link";
 import Image from "next/image";
+import RedirectIfAuth from "@/components/redirect-if-auth";
 
 export default function SignupPage() {
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
+      <RedirectIfAuth />
       <div className="flex flex-col gap-4 p-6 md:p-10">
         <div className="flex justify-center gap-2 md:justify-start">
           <Link href="/" className="flex items-center gap-2 font-medium">
