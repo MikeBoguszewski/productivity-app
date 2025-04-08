@@ -11,7 +11,7 @@ import { incrementFocusTime } from "@/lib/firebase";
 export default function Timer() {
   const [minutesInput, setMinutesInput] = useState("30");
   const [expiryTimestamp, setExpiryTimestamp] = useState(new Date());
-  const { seconds, minutes, hours, days, isRunning, start, pause, resume, restart } = useTimer({ expiryTimestamp, onExpire: () => console.warn("onExpire called"), interval: 20, autoStart: false });
+  const { seconds, minutes, hours, isRunning, pause, resume, restart } = useTimer({ expiryTimestamp, onExpire: () => console.warn("onExpire called"), interval: 20, autoStart: false });
 
   const handleMinutesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     console.log(e.target.value);
