@@ -59,7 +59,7 @@ export function FocusChart({ className }: { className?: string }) {
               axisLine={false}
               tickFormatter={(value) => {
                 const date = new Date(value + "T00:00:00Z");
-                date.setHours(date.getHours() + 24);
+                date.setHours(date.getHours());
                 return date.toLocaleDateString(undefined, {
                   weekday: "short",
                 });
@@ -70,8 +70,8 @@ export function FocusChart({ className }: { className?: string }) {
               content={
                 <ChartTooltipContent
                   labelFormatter={(value) => {
-                    const date = new Date(value + "T00:00:00Z"); // Ensure UTC date
-                    date.setHours(date.getHours() + 24); // Add one hour to adjust for time zone shift
+                    const date = new Date(value + "T00:00:00Z");
+                    date.setHours(date.getHours());
                     return date.toLocaleDateString(undefined, {
                       day: "numeric",
                       month: "long",
