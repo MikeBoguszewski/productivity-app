@@ -6,8 +6,10 @@ import { Card } from "@/components/ui/card";
 
 export default function TasksPage() {
  return (
-   <Card className="container mx-auto p-10 h-full flex flex-col">
-     <TasksTable />
-   </Card>
+   <div className="p-4 h-full w-full">
+     <Card className="container p-10 h-full flex flex-col">
+       <TasksTable />
+     </Card>
+   </div>
  );
 }

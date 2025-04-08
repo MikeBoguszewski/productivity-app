@@ -176,7 +176,6 @@ export function listenForTasks(callback: (tasks: Task[]) => void) {
   try {
     const user = auth.currentUser;
     if (!user) {
-      console.error(auth);
       return { success: false, unsubscribe: () => {} };
     }
     const userId = user.uid;

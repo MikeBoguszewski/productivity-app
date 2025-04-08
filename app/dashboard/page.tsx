@@ -6,7 +6,7 @@ import { FocusChart } from "@/components/dashboard/focus-chart";
 
 export default function DashboardPage() {
   return (
-    <div className="grid lg:grid-cols-3 grid-cols-1 lg:grid-rows-2 grid-rows-4 gap-5 min-h-full">
+    <div className="grid lg:grid-cols-3 grid-cols-1 lg:grid-rows-2 grid-rows-4 gap-5 min-h-full p-4">
       <WelcomePanel className="lg:col-span-3 lg:min-h-0 min-h-96" />
       <div className="flex flex-col gap-4 min-h-44">
         <TimeFocused className="flex-1" />

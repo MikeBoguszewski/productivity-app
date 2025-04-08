@@ -51,7 +51,7 @@ export default function WelcomePanel({ className }: { className?: string }) {
         </div>
         <h1 className="text-4xl font-bold h-full line-clamp-3">
           {getGreeting()}
-          {", " + user?.displayName || ""}
+          {user?.displayName ? `, ${user.displayName}` : ""}
         </h1>
       </CardHeader>
       <Separator orientation="horizontal" />

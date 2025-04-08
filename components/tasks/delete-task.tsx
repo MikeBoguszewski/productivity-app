@@ -25,7 +25,7 @@ export default function DeleteTask<TData extends Task>({ isDisabled, selectedTas
     }
   };
   return (
-    <Button className="m-5" onClick={handleDelete} disabled={isDisabled}>
+    <Button className="m-5" onClick={handleDelete} disabled={isDisabled} variant={"destructive"}>
       Delete Selected
     </Button>
   );
