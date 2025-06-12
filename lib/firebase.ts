@@ -3,7 +3,7 @@
 import { FirebaseError, initializeApp } from "firebase/app";
 // import { getAnalytics } from "firebase/analytics";
 import { getFirestore, setDoc, doc, collection, where, query, onSnapshot, deleteDoc, increment, orderBy, limit, getDocs, getDoc, serverTimestamp } from "firebase/firestore";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithRedirect, sendPasswordResetEmail, updateProfile, signOut, getRedirectResult } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithRedirect, sendPasswordResetEmail, updateProfile, signOut, getRedirectResult, signInAnonymously } from "firebase/auth";
 import { Task } from "@/components/tasks/columns";
 import { ChartData } from "@/components/dashboard/focus-chart";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -124,12 +124,23 @@ export async function googleLogin() {
   }
 }
 
+export async function anonymousLogin() {
+  try {
+    await signInAnonymously(auth);
+    return { success: true };
+  } catch (error) {
+    if (error instanceof FirebaseError) {
+      const message = "An unexpected error occurred. Please try again later.";
+      return { success: false, message: message };
+    } else {
+      return { success: false, message: "An unknown error occurred. Please try again later." };
+    }
+  }
+}
+
 export async function checkRedirectLogin() {
   try {
     const result = await getRedirectResult(auth);
-    // if (result?.user) {
-    //   console.log("Signed in with redirect:", result.user);
-    // }
   } catch (error) {
     // console.error("Redirect error", error);
   }

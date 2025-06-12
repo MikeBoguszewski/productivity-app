@@ -4,10 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import ForgotPassword from "@/components/forgot-password";
-import { login, googleLogin } from "@/lib/firebase";
+import { login, googleLogin, anonymousLogin } from "@/lib/firebase";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { User } from "lucide-react";
 
 export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRef<"form">) {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -36,6 +37,16 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
       toast.error(result.message);
     }
   };
+  
+  const handleAnonymousLogin = async () => {
+    const result = await anonymousLogin();
+    if (result.success) {
+      router.push("/dashboard");
+    } else {
+      toast.error(result.message);
+    }
+  };
+
   return (
     <form className={cn("flex flex-col gap-6", className)} {...props} onSubmit={handleSubmit}>
       <div className="flex flex-col items-center gap-2 text-center">
@@ -71,6 +82,10 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
             <path d="M29.25,15v1L27,19.5H16.5V14H28.25A1,1,0,0,1,29.25,15Z" fill="#4285f4" />
           </svg>
           Log in with Google
+        </Button>
+        <Button variant="outline" className="w-full" type="button" onClick={handleAnonymousLogin}>
+          <User className="mr-2 h-4 w-4" />
+          Log in as Guest
         </Button>
       </div>
       <div className="text-center text-sm">
