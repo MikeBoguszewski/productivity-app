@@ -32,7 +32,10 @@ export default function TimeFocused({ className }: { className?: string }) {
         <CardTitle className="text-xl">Total Time Focused</CardTitle>
         <Clock4 className="size-6" />
       </CardHeader>
-      <CardContent className="font-bold text-4xl h-full pt-3">{formattedTimeFocused}</CardContent>
+      {timeFocused !== null && (
+      <CardContent className="font-bold text-4xl h-full pt-3">{formattedTimeFocused}</CardContent>)}
+      {timeFocused === null && (
+        <CardContent className="font-bold text-4xl h-full pt-3">0 Minutes</CardContent>)}
     </Card>
   );
 }
