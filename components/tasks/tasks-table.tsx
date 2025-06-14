@@ -46,8 +46,8 @@ export function TasksTable() {
   return (
     <>
       <div className="flex justify-between mb-5 flex-col lg:flex-row items-start lg:items-center">
-        <CardTitle className="text-3xl w-full">To-Do List</CardTitle>
-        <div className="flex items-center">
+        <CardTitle className="text-3xl w-full mb-3">To-Do List</CardTitle>
+        <div className="flex sm:items-center flex-col sm:flex-row">
           <AddTask />
           <DeleteTask isDisabled={table.getSelectedRowModel().rows.length === 0} selectedTasks={selectedData} />
         </div>

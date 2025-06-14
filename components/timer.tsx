@@ -46,7 +46,7 @@ export default function Timer() {
     <div className="flex items-center justify-center w-full flex-col">
       <DropdownMenu>
         <div className="flex flex-row items-center justify-center mb-16 gap-4">
-          <span className="text-7xl sm:text-8xl font-bold">{formattedTime}</span>
+          <span className="text-6xl sm:text-7xl font-bold">{formattedTime}</span>
           <DropdownMenuTrigger>
             <Ellipsis />
           </DropdownMenuTrigger>
